@@ -12,6 +12,7 @@ import {
   clearAuthData,
   getUserData,
 } from "../config/services/authStorage";
+import { toast } from "react-toastify";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,6 +31,7 @@ export default function Navbar() {
 
   const handleLogout = () => {
     clearAuthData();
+    toast.success("Logged out successfully!");
     navigate("/login");
     closeMenu();
   };

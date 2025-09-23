@@ -13,6 +13,7 @@ import {
 } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { venuesApi } from "../config/services/venuesApi";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 export default function VenueDetails() {
   const { auth } = useAuth();
@@ -34,7 +35,7 @@ export default function VenueDetails() {
           _bookings: true,
           _owner: true,
         });
-        setVenue(data.data); // assuming API response has { data: {...} }
+        setVenue(data.data); 
       } catch (err) {
         setError(err.message || "Failed to load venue");
       } finally {
@@ -45,9 +46,12 @@ export default function VenueDetails() {
     fetchVenue();
   }, [id, auth?.accessToken]);
 
-  if (loading) {
-    return <div className="p-6 text-center">Loading venue details...</div>;
-  }
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <LoadingSpinner />
+      </div>
+    );
 
   if (error) {
     return (

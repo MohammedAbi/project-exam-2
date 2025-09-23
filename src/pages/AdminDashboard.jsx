@@ -1,10 +1,11 @@
-import React, { useState } from "react";
 import { toast } from "react-toastify";
-
-import { getAccessToken, getUserData } from "../config/services/authStorage";
 import { venuesApi } from "../config/services/venuesApi";
-import CreateVenueForm from "../components/forms/CreateVenueForm";
 import { useVenues } from "../hooks/useVenues";
+import { useState } from "react";
+import { getAccessToken, getUserData } from "../config/services/authStorage";
+import ConfirmModal from "../components/ConfirmModal";
+import LoadingSpinner from "../components/LoadingSpinner";
+import CreateVenueForm from "../components/forms/CreateVenueForm";
 
 export default function AdminDashboard() {
   const currentUser = getUserData();
@@ -12,6 +13,10 @@ export default function AdminDashboard() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editVenueId, setEditVenueId] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState({
+    open: false,
+    venueId: null,
+  });
 
   const initialParams = currentUser
     ? { owner: currentUser.name, page: 1, limit: 5 }
@@ -35,6 +40,28 @@ export default function AdminDashboard() {
     setIsModalOpen(false);
   };
 
+  const openDeleteModal = (venueId) =>
+    setConfirmDelete({ open: true, venueId });
+  const closeDeleteModal = () =>
+    setConfirmDelete({ open: false, venueId: null });
+
+  const handleDelete = async (venueId) => {
+    if (!venueId) return;
+    openDeleteModal(venueId);
+  };
+
+  const handleDeleteConfirmed = async () => {
+    try {
+      await venuesApi.deleteVenue(confirmDelete.venueId, accessToken);
+      toast.success("Venue deleted successfully!");
+      refetch();
+    } catch (err) {
+      toast.error(`Failed to delete venue: ${err.message || err}`);
+    } finally {
+      closeDeleteModal();
+    }
+  };
+
   const goToPrevPage = () =>
     setParams((prev) => ({ ...prev, page: Math.max(prev.page - 1, 1) }));
 
@@ -44,28 +71,11 @@ export default function AdminDashboard() {
       page: totalPages ? Math.min(prev.page + 1, totalPages) : prev.page + 1,
     }));
 
-  const handleDelete = async (venueId) => {
-    if (!venueId) return;
-
-    const confirmed = window.confirm(
-      "Are you sure you want to delete this venue?"
-    );
-    if (!confirmed) return;
-
-    try {
-      await venuesApi.deleteVenue(venueId, accessToken);
-      toast.success("Venue deleted successfully!");
-      refetch();
-    } catch (err) {
-      toast.error(`Failed to delete venue: ${err.message || err}`);
-    }
-  };
-
   if (!currentUser) return <div>User not logged in.</div>;
-
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
+      {/* Modals at the top for clarity */}
       {isModalOpen && (
         <CreateVenueForm
           onClose={closeModal}
@@ -74,6 +84,14 @@ export default function AdminDashboard() {
           refreshVenues={refetch}
         />
       )}
+
+      <ConfirmModal
+        isOpen={confirmDelete.open}
+        title="Delete Venue"
+        message="Are you sure you want to delete this venue?"
+        onConfirm={handleDeleteConfirmed}
+        onCancel={closeDeleteModal}
+      />
 
       {/* User Header */}
       <header
@@ -93,9 +111,9 @@ export default function AdminDashboard() {
         <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-lg">
           {currentUser.name}
         </h1>
-        <p className="mt-3 max-w-xl mx-auto text-base sm:text-lg font-light drop-shadow-sm">
+        {/* <p className="mt-3 max-w-xl mx-auto text-base sm:text-lg font-light drop-shadow-sm">
           {currentUser.bio}
-        </p>
+        </p> */}
         <p className="mt-1 text-xs sm:text-sm opacity-80 drop-shadow-sm">
           {currentUser.email}
         </p>
@@ -115,8 +133,11 @@ export default function AdminDashboard() {
           </button>
         </div>
 
+        {/* Venues Table & Pagination */}
         {loading ? (
-          <div>Loading your venues...</div>
+          <div className="flex justify-center py-12">
+            <LoadingSpinner />
+          </div>
         ) : error ? (
           <div className="text-red-600">Error: {error}</div>
         ) : venues.length === 0 ? (
@@ -193,7 +214,6 @@ export default function AdminDashboard() {
           </div>
         )}
 
-        {/* Pagination */}
         <div className="flex justify-center items-center gap-2 sm:gap-4 mt-6 text-sm sm:text-base">
           <button
             onClick={goToPrevPage}

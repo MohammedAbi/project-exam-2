@@ -5,6 +5,8 @@ import { profilesApi } from "../config/services/profilesApi";
 import { getUserData, saveAuthData } from "../config/services/authStorage";
 import ProfileEditModal from "../components/ProfileEditModal";
 import { useAuth } from "../hooks/useAuth";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { toast } from "react-toastify";
 
 export default function Profile() {
   const currentUser = getUserData();
@@ -13,6 +15,7 @@ export default function Profile() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   // Modal state
   const [isEditOpen, setIsEditOpen] = useState(false);
@@ -42,7 +45,26 @@ export default function Profile() {
   }, [auth, accessToken]);
 
   // 🔑 Save handler
+  // const handleSaveProfile = async (updatedData) => {
+  //   try {
+  //     const updatedProfile = await profilesApi.updateProfile(
+  //       auth.name,
+  //       updatedData,
+  //       accessToken
+  //     );
+  //     setProfile(updatedProfile);
+
+  //     // Also update localStorage so UI stays consistent
+  //     saveAuthData({ ...currentUser, ...updatedProfile });
+  //     // ✅ Show success toast
+  //     toast.success("Profile updated successfully!");
+  //   } catch (err) {
+  //     console.error("Failed to update profile:", err);
+  //     toast.error("Failed to save changes. Please try again.");
+  //   }
+  // };
   const handleSaveProfile = async (updatedData) => {
+    setSaving(true);
     try {
       const updatedProfile = await profilesApi.updateProfile(
         auth.name,
@@ -50,16 +72,21 @@ export default function Profile() {
         accessToken
       );
       setProfile(updatedProfile);
-
-      // Also update localStorage so UI stays consistent
       saveAuthData({ ...currentUser, ...updatedProfile });
+      toast.success("Profile updated successfully!");
     } catch (err) {
       console.error("Failed to update profile:", err);
-      alert("Failed to save changes. Please try again.");
+      toast.error("Failed to save changes. Please try again.");
+    } finally {
+      setSaving(false);
     }
   };
-
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <LoadingSpinner />
+      </div>
+    );
   if (error) return <p>Error: {error}</p>;
   if (!profile) return <p>No profile data found.</p>;
 

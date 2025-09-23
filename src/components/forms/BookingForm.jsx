@@ -8,6 +8,20 @@ import {
   isWithinInterval,
 } from "date-fns";
 import { bookingsApi } from "../../config/services/bookingsApi";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+
+/**
+ * BookingForm component allows users to select check-in/check-out dates,
+ * specify number of guests, and submit a booking for a venue.
+ *
+ * @param {Object} props
+ * @param {string|number} props.venueId - ID of the venue to book.
+ * @param {string} props.accessToken - User access token for authentication.
+ * @param {number} [props.maxGuests=1] - Maximum allowed guests for the venue.
+ * @param {number} [props.defaultGuests=1] - Default number of guests in the form.
+ * @param {Array<Object>} [props.existingBookings=[]] - Array of existing bookings to block dates.
+ */
 
 export default function BookingForm({
   venueId,
@@ -20,10 +34,9 @@ export default function BookingForm({
   const [checkOut, setCheckOut] = useState(null);
   const [guests, setGuests] = useState(defaultGuests);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
-  // Build blocked dates from existing bookings
+  const navigate = useNavigate();
+
   const blockedDates = useMemo(() => {
     return existingBookings.flatMap((b) =>
       eachDayOfInterval({
@@ -33,12 +46,10 @@ export default function BookingForm({
     );
   }, [existingBookings]);
 
-  // Highlight booked dates in red and selected range in blue
   const dayClassName = (date) => {
     const isBlocked = blockedDates.some(
       (d) => d.toDateString() === date.toDateString()
     );
-
     if (isBlocked) return "bg-gray-200 text-gray-800 cursor-not-allowed";
     if (
       checkIn &&
@@ -50,11 +61,9 @@ export default function BookingForm({
     return "bg-white text-gray-800";
   };
 
-  // Check if selected range overlaps with blocked dates
   const isRangeBlocked = (start, end) => {
     if (!start || !end) return false;
-    const range = eachDayOfInterval({ start, end });
-    return range.some((day) =>
+    return eachDayOfInterval({ start, end }).some((day) =>
       blockedDates.some(
         (blocked) => blocked.toDateString() === day.toDateString()
       )
@@ -63,28 +72,15 @@ export default function BookingForm({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
 
-    if (!checkIn || !checkOut) {
-      setError("Please select check-in and check-out dates.");
-      return;
-    }
-
-    if (isRangeBlocked(checkIn, checkOut)) {
-      setError("Selected dates overlap with existing bookings.");
-      return;
-    }
-
-    if (!guests || guests < 1 || guests > maxGuests) {
-      setError(`Guests must be between 1 and ${maxGuests}.`);
-      return;
-    }
-
-    if (!venueId || !accessToken) {
-      setError("Invalid venue or user not logged in.");
-      return;
-    }
+    if (!checkIn || !checkOut)
+      return toast.error("Please select check-in and check-out dates.");
+    if (isRangeBlocked(checkIn, checkOut))
+      return toast.error("Selected dates overlap with existing bookings.");
+    if (!guests || guests < 1 || guests > maxGuests)
+      return toast.error(`Guests must be between 1 and ${maxGuests}.`);
+    if (!venueId || !accessToken)
+      return toast.error("Invalid venue or user not logged in.");
 
     const bookingData = {
       venueId,
@@ -96,13 +92,16 @@ export default function BookingForm({
     setLoading(true);
     try {
       await bookingsApi.createBooking(bookingData, accessToken);
-      setSuccess("Booking successful!");
+      toast.success("Booking successful! Redirecting to Profile...");
       setCheckIn(null);
       setCheckOut(null);
       setGuests(defaultGuests);
+      setTimeout(() => {
+        navigate("/profile");
+      }, 3000);
     } catch (err) {
       const msg = err.response?.data?.errors?.[0]?.message || "Booking failed";
-      setError(msg);
+      toast.error(msg);
     } finally {
       setLoading(false);
     }
@@ -126,7 +125,6 @@ export default function BookingForm({
         dayClassName={dayClassName}
         wrapperClassName="w-full"
       />
-
       <DatePicker
         selected={checkOut}
         onChange={setCheckOut}
@@ -140,7 +138,6 @@ export default function BookingForm({
         dayClassName={dayClassName}
         wrapperClassName="w-full"
       />
-
       <input
         type="number"
         min={1}
@@ -150,7 +147,6 @@ export default function BookingForm({
         placeholder={`Guests (max ${maxGuests})`}
         className="w-full border rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800"
       />
-
       <button
         type="submit"
         disabled={loading}
@@ -158,9 +154,6 @@ export default function BookingForm({
       >
         {loading ? "Booking..." : "Book Now"}
       </button>
-
-      {error && <p className="text-red-600 font-semibold">{error}</p>}
-      {success && <p className="text-green-600 font-semibold">{success}</p>}
     </form>
   );
 }

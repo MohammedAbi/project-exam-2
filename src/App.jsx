@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
-import EditVenue from "./pages/EditVenue";
+// import EditVenue from "./pages/EditVenue";
 import Contact from "./pages/Contact";
 import { AuthProvider } from "./hooks/context/AuthProvider";
 
@@ -27,7 +27,7 @@ export default function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/venues/edit/:id" element={<EditVenue />} />
+              <Route path="/admin/venues/edit/:id" element={<AdminDashboard />} />
             </Routes>
           </main>
           <Footer />

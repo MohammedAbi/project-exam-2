@@ -1,6 +1,27 @@
 import { useEffect, useState, useCallback } from "react";
 import { venuesApi } from "../config/services/venuesApi";
 
+/**
+ * Custom hook to fetch venues with pagination, sorting, and optional owner filter.
+ *
+ * @param {Object} initialParams - Initial query parameters.
+ * @param {number} [initialParams.limit=10] - Items per page.
+ * @param {number} [initialParams.page=1] - Current page.
+ * @param {string|null} [initialParams.owner=null] - Filter by owner ID.
+ * @param {string} [initialParams.sort="name"] - Sort field.
+ * @param {"asc"|"desc"} [initialParams.sortOrder="asc"] - Sort order.
+ * @param {string|null} [accessToken=null] - Optional authentication token.
+ *
+ * @returns {Object} Hook return values
+ * @returns {Array} venues - Array of venue objects
+ * @returns {boolean} loading - Loading state
+ * @returns {string|null} error - Error message if fetching fails
+ * @returns {number} totalPages - Total number of pages
+ * @returns {number} currentPage - Current page number
+ * @returns {Object} params - Current query parameters
+ * @returns {Function} setParams - Function to update query parameters
+ * @returns {Function} refetch - Function to manually refetch venues
+ */
 export function useVenues(
   initialParams = {
     limit: 10,
