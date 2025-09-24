@@ -41,10 +41,10 @@ export default function HeroSlider() {
         >
           {/* Text Content */}
           <div className="absolute top-1/2 md:top-2/3 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-30 text-white text-center px-4 flex flex-col justify-center items-center">
-            <div className="uppercase tracking-[4px] md:tracking-[6px] mb-3 md:mb-5 text-sm md:text-base">
+            <div className="uppercase tracking-[4px] md:tracking-[6px] mb-3 md:mb-5 text-sm md:text-base text-white drop-shadow-lg">
               Just Enjoy and Relax
             </div>
-            <h1 className="text-white sm:text-[24px] md:text-[32px] lg:text-[68px] uppercase tracking-[2px] max-w-[90%] md:max-w-[920px] leading-tight mb-5 md:mb-8">
+            <h1 className="text-white sm:text-[24px] md:text-[32px] lg:text-[68px] uppercase tracking-[2px] max-w-[90%] md:max-w-[920px] leading-tight mb-5 md:mb-8 drop-shadow-lg">
               {slide.title}
             </h1>
             <button

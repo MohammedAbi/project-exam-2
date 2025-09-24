@@ -161,16 +161,26 @@ export default function RegisterForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <fieldset className="border p-3 rounded">
           <legend className="font-semibold mb-2">Avatar (optional)</legend>
+
+          <label htmlFor="avatarUrl" className="block mb-1 text-sm">
+            Avatar URL
+          </label>
           <input
             type="url"
+            id="avatarUrl"
             name="avatarUrl"
             placeholder="Avatar URL"
             value={formData.avatarUrl}
             onChange={handleChange}
             className="w-full border p-2 rounded mb-2"
           />
+
+          <label htmlFor="avatarAlt" className="block mb-1 text-sm">
+            Alt text
+          </label>
           <input
             type="text"
+            id="avatarAlt"
             name="avatarAlt"
             placeholder="Alt text"
             value={formData.avatarAlt}
@@ -181,16 +191,26 @@ export default function RegisterForm() {
 
         <fieldset className="border p-3 rounded">
           <legend className="font-semibold mb-2">Banner (optional)</legend>
+
+          <label htmlFor="bannerUrl" className="block mb-1 text-sm">
+            Banner URL
+          </label>
           <input
             type="url"
+            id="bannerUrl"
             name="bannerUrl"
             placeholder="Banner URL"
             value={formData.bannerUrl}
             onChange={handleChange}
             className="w-full border p-2 rounded mb-2"
           />
+
+          <label htmlFor="bannerAlt" className="block mb-1 text-sm">
+            Alt text
+          </label>
           <input
             type="text"
+            id="bannerAlt"
             name="bannerAlt"
             placeholder="Alt text"
             value={formData.bannerAlt}

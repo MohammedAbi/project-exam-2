@@ -148,6 +148,7 @@ export default function Navbar() {
         <button
           className="md:hidden text-2xl focus:outline-none"
           onClick={toggleMenu}
+          aria-label={isOpen ? "Close menu" : "Open menu"}
         >
           {isOpen ? <FaTimes /> : <FaBars />}
         </button>

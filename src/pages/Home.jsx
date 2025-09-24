@@ -33,7 +33,10 @@ export default function Home() {
   return (
     <div className="space-y-6">
       <HeroSlider />
-      <h1 className="text-3xl font-bold text-center" id="rooms-title">
+      <h1
+        className="text-3xl font-bold text-center drop-shadow-lg"
+        id="rooms-title"
+      >
         Available Rooms & Suites
       </h1>
 
