@@ -3,14 +3,13 @@ import { ToastContainer } from "react-toastify";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
-import VenueDetails from "./pages/VenueDetails";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import AdminDashboard from "./pages/AdminDashboard";
-// import EditVenue from "./pages/EditVenue";
 import Contact from "./pages/Contact";
 import { AuthProvider } from "./hooks/context/AuthProvider";
+import VenueDetailsPage from "./pages/VenueDetailsPage";
+import Login from "./pages/LoginPage";
+import Register from "./pages/RegisterPage";
 
 export default function App() {
   return (
@@ -21,13 +20,16 @@ export default function App() {
           <main className="flex-1">
             <Routes>
               <Route path="/" element={<Home />} />
-              <Route path="/venue/:id" element={<VenueDetails />} />
+              <Route path="/venue/:id" element={<VenueDetailsPage />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/admin" element={<AdminDashboard />} />
-              <Route path="/admin/venues/edit/:id" element={<AdminDashboard />} />
+              <Route
+                path="/admin/venues/edit/:id"
+                element={<AdminDashboard />}
+              />
             </Routes>
           </main>
           <Footer />

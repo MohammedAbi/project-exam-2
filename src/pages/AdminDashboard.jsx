@@ -1,11 +1,13 @@
 import { toast } from "react-toastify";
+import { useState } from "react";
 import { venuesApi } from "../config/services/venuesApi";
 import { useVenues } from "../hooks/useVenues";
-import { useState } from "react";
 import { getAccessToken, getUserData } from "../config/services/authStorage";
 import ConfirmModal from "../components/ConfirmModal";
-import LoadingSpinner from "../components/LoadingSpinner";
 import CreateVenueForm from "../components/forms/CreateVenueForm";
+import UserHeader from "../components/admin/UserHeader";
+import VenuesTable from "../components/admin/VenuesTable";
+import PaginationControls from "../components/admin/PaginationControls";
 
 export default function AdminDashboard() {
   const currentUser = getUserData();
@@ -29,12 +31,10 @@ export default function AdminDashboard() {
     setEditVenueId(null);
     setIsModalOpen(true);
   };
-
   const openEditModal = (venueId) => {
     setEditVenueId(venueId);
     setIsModalOpen(true);
   };
-
   const closeModal = () => {
     setEditVenueId(null);
     setIsModalOpen(false);
@@ -44,11 +44,6 @@ export default function AdminDashboard() {
     setConfirmDelete({ open: true, venueId });
   const closeDeleteModal = () =>
     setConfirmDelete({ open: false, venueId: null });
-
-  const handleDelete = async (venueId) => {
-    if (!venueId) return;
-    openDeleteModal(venueId);
-  };
 
   const handleDeleteConfirmed = async () => {
     try {
@@ -75,7 +70,6 @@ export default function AdminDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-      {/* Modals at the top for clarity */}
       {isModalOpen && (
         <CreateVenueForm
           onClose={closeModal}
@@ -93,33 +87,8 @@ export default function AdminDashboard() {
         onCancel={closeDeleteModal}
       />
 
-      {/* User Header */}
-      <header
-        className="rounded-lg mb-8 sm:mb-12 text-white text-center p-6 sm:p-10 md:p-12 relative overflow-hidden"
-        style={{
-          backgroundImage: `url(${currentUser.banner?.url || "/default-banner.jpg"})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          boxShadow: "inset 0 0 0 2000px rgba(0,0,0,0.5)",
-        }}
-      >
-        <img
-          src={currentUser.avatar?.url || "/default-avatar.png"}
-          alt={currentUser.avatar?.alt || currentUser.name || "User avatar"}
-          className="mx-auto rounded-full border-4 border-white w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover mb-4 shadow-lg"
-        />
-        <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-lg">
-          {currentUser.name}
-        </h1>
-        {/* <p className="mt-3 max-w-xl mx-auto text-base sm:text-lg font-light drop-shadow-sm">
-          {currentUser.bio}
-        </p> */}
-        <p className="mt-1 text-xs sm:text-sm opacity-80 drop-shadow-sm">
-          {currentUser.email}
-        </p>
-      </header>
+      <UserHeader user={currentUser} />
 
-      {/* Venues Section */}
       <section>
         <div className="flex flex-col sm:flex-row gap-3 justify-between items-center mb-6">
           <h2 className="text-2xl sm:text-3xl font-bold text-gray-800">
@@ -133,107 +102,20 @@ export default function AdminDashboard() {
           </button>
         </div>
 
-        {/* Venues Table & Pagination */}
-        {loading ? (
-          <div className="flex justify-center py-12">
-            <LoadingSpinner />
-          </div>
-        ) : error ? (
-          <div className="text-red-600">Error: {error}</div>
-        ) : venues.length === 0 ? (
-          <div>No venues found.</div>
-        ) : (
-          <div className="overflow-x-auto rounded-lg shadow-lg border border-gray-200">
-            <table className="min-w-full bg-white text-xs sm:text-sm">
-              <thead>
-                <tr className="bg-purple-600 text-white text-left uppercase">
-                  <th className="p-2 sm:p-4">Image</th>
-                  <th className="p-2 sm:p-4">Name</th>
-                  <th className="p-2 sm:p-4 hidden md:table-cell">
-                    Description
-                  </th>
-                  <th className="p-2 sm:p-4 text-center">Max Guests</th>
-                  <th className="p-2 sm:p-4 text-center">Price / Night</th>
-                  <th className="p-2 sm:p-4 text-center">Rating</th>
-                  <th className="p-2 sm:p-4 hidden lg:table-cell">Location</th>
-                  <th className="p-2 sm:p-4 text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {venues.map((venue) => (
-                  <tr
-                    key={venue.id}
-                    className="hover:bg-purple-50 transition-colors last:border-none"
-                  >
-                    <td className="p-2 sm:p-3">
-                      <img
-                        src={venue.media?.[0]?.url || "/placeholder.jpg"}
-                        alt={venue.media?.[0]?.alt || venue.name}
-                        className="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded"
-                      />
-                    </td>
-                    <td className="p-2 sm:p-3 text-purple-800 truncate">
-                      {venue.name}
-                    </td>
-                    <td className="p-2 sm:p-3 text-purple-800 hidden md:table-cell max-w-xs truncate">
-                      {venue.description || "No description"}
-                    </td>
-                    <td className="p-2 sm:p-3 text-purple-800 text-center">
-                      {venue.maxGuests}
-                    </td>
-                    <td className="p-2 sm:p-3 text-purple-800 text-center">
-                      ${venue.price}
-                    </td>
-                    <td className="p-2 sm:p-3 text-center text-yellow-600">
-                      {venue.rating != null ? venue.rating.toFixed(1) : "-"} ⭐
-                    </td>
-                    <td className="p-2 sm:p-3 text-purple-800 hidden lg:table-cell max-w-xs truncate">
-                      {venue.location?.city || "Unknown city"},{" "}
-                      {venue.location?.country || "Unknown country"}
-                    </td>
-                    <td className="p-2 sm:p-3 text-center">
-                      <div className="inline-flex justify-center gap-1 sm:gap-2">
-                        <button
-                          onClick={() => openEditModal(venue.id)}
-                          className="px-3 sm:px-4 py-1 sm:py-2 rounded bg-blue-600 text-white text-xs sm:text-sm hover:bg-blue-700 transition"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(venue.id)}
-                          className="px-3 sm:px-4 py-1 sm:py-2 rounded bg-red-600 text-white text-xs sm:text-sm hover:bg-red-700 transition"
-                        >
-                          Delete
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <VenuesTable
+          venues={venues}
+          loading={loading}
+          error={error}
+          onEdit={openEditModal}
+          onDelete={openDeleteModal}
+        />
 
-        <div className="flex justify-center items-center gap-2 sm:gap-4 mt-6 text-sm sm:text-base">
-          <button
-            onClick={goToPrevPage}
-            disabled={params?.page === 1}
-            className="px-3 sm:px-4 py-1 sm:py-2 bg-purple-600 hover:bg-purple-900 text-white rounded disabled:bg-gray-300"
-          >
-            Prev
-          </button>
-          <span>
-            Page {params?.page}
-            {totalPages ? ` of ${totalPages}` : ""}
-          </span>
-          <button
-            onClick={goToNextPage}
-            disabled={totalPages ? params?.page >= totalPages : false}
-            className="px-3 sm:px-4 py-1 sm:py-2 bg-purple-600 hover:bg-purple-900 text-white rounded disabled:bg-gray-300"
-          >
-            Next
-          </button>
-        </div>
+        <PaginationControls
+          page={params.page}
+          totalPages={totalPages}
+          onPrev={goToPrevPage}
+          onNext={goToNextPage}
+        />
       </section>
     </div>
   );
