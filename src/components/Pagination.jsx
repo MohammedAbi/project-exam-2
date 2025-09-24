@@ -10,6 +10,7 @@ export default function Pagination({
         onClick={onPrevious}
         disabled={currentPage === 1}
         className={`px-4 py-2 rounded ${currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-900 text-white"}`}
+        aria-label="Go to previous page"
       >
         Previous
       </button>
@@ -22,6 +23,7 @@ export default function Pagination({
         onClick={onNext}
         disabled={currentPage >= totalPages}
         className={`px-4 py-2 rounded ${currentPage >= totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-purple-600 hover:bg-purple-900 text-white"}`}
+        aria-label="Go to next page"
       >
         Next
       </button>

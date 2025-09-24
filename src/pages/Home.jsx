@@ -31,7 +31,7 @@ export default function Home() {
   if (loading) return <LoadingSpinner />;
 
   return (
-    <div className="space-y-6">
+    <main className="space-y-6">
       <HeroSlider />
       <h1
         className="text-3xl font-bold text-center drop-shadow-lg"
@@ -52,6 +52,6 @@ export default function Home() {
           onPrevious={handlePrevious}
         />
       )}
-    </div>
+    </main>
   );
 }
