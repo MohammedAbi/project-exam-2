@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function VenueActions({ onEdit, onDelete }) {
   return (
     <div className="inline-flex justify-center gap-1 sm:gap-2">
