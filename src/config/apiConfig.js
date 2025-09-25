@@ -19,7 +19,6 @@ export const PROFILES_ENDPOINTS = {
     `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(name)}`,
   BOOKINGS: (name) =>
     `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(name)}/bookings`,
-  // VENUES: (name) => `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(name)}/venues`,
   VENUES: (profileName) =>
     `${API_BASE_URL}/holidaze/profiles/${encodeURIComponent(profileName)}/venues`,
   SEARCH: (query) =>
