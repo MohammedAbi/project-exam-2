@@ -3,7 +3,7 @@ import {
   validateContact,
   ValidateLogin,
   validateRegister,
-} from "../../../src/components/forms/formValidation/Validation";
+} from "../../src/components/forms/formValidation/Validation";
 
 // Mock toast.error
 vi.mock("react-toastify", () => ({

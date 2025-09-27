@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 
 const loginMock = vi.fn().mockResolvedValue({ email: "test@stud.noroff.no" });
 
-vi.mock("../../../src/hooks/useAuth", () => ({
+vi.mock("../../../../src/hooks/useAuth", () => ({
   useAuth: () => ({
     login: loginMock,
     loading: false,
@@ -28,9 +28,9 @@ vi.mock("react-toastify", () => ({
   },
 }));
 
-import LoginForm from "../../../src/components/forms/LoginForm";
+import LoginForm from "../../../../src/components/forms/LoginForm";
 import { toast } from "react-toastify";
-import * as authStorage from "../../../src/config/services/authStorage";
+import * as authStorage from "../../../../src/config/services/authStorage";
 
 const renderWithRouter = (ui) => render(<BrowserRouter>{ui}</BrowserRouter>);
 
