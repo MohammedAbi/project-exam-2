@@ -13,6 +13,7 @@ import { toast } from "react-toastify";
 export function ValidateRegister({ name, email, password, confirmPassword }) {
   const errors = {};
 
+  
   if (!name.trim()) errors.name = "Name is required";
 
   if (!email.trim()) errors.email = "Email is required";

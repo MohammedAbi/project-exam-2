@@ -1,5 +1,9 @@
 import React, { useState } from "react";
-import { ValidateContact } from "../components/forms/formValidation/Validation";
+import {
+  ValidateRegister,
+  ValidateLogin,
+  ValidateContact,
+} from "../components/forms/formValidation/Validation";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
