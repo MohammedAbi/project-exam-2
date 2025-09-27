@@ -3,10 +3,9 @@ import { Link } from "react-router-dom";
 import { BsPeople } from "react-icons/bs";
 
 export default function VenueCard({ venue }) {
-
   const { id, name, description, media, maxGuests, price, location } = venue;
 
-  const image = media?.[0]?.url || "/placeholder.jpg";
+  const image = media?.[0]?.url;
   const alt = media?.[0]?.alt || name;
 
   return (

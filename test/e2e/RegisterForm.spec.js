@@ -4,10 +4,10 @@ test("register page loads and user can register", async ({ page }) => {
   await page.goto("http://localhost:5173/register");
 
   // Fill required fields
-  await page.fill('input[name="name"]', "E2etestuser123126");
-  await page.fill('input[name="email"]', "E2etestuser123126@stud.noroff.no");
-  await page.fill('input[name="password"]', "abc123126");
-  await page.fill('input[name="confirmPassword"]', "abc123126");
+  await page.fill('input[name="name"]', "E2etestuser123128");
+  await page.fill('input[name="email"]', "E2etestuser123128@stud.noroff.no");
+  await page.fill('input[name="password"]', "abc123128");
+  await page.fill('input[name="confirmPassword"]', "abc123128");
 
   // Optional fields
   await page.fill(

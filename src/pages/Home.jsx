@@ -47,8 +47,8 @@ export default function Home() {
       <SearchInput
         value={search}
         onSearch={(value) => {
-          setSearch(value); // update local state for input
-          setParams((prev) => ({ ...prev, search: value, page: 1 })); // update API fetch params
+          setSearch(value);
+          setParams((prev) => ({ ...prev, search: value, page: 1 }));
         }}
         placeholder="Search for venues..."
       />

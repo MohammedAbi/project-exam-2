@@ -15,7 +15,7 @@ export default function Profile() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [setSaving] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   useEffect(() => {
@@ -78,6 +78,7 @@ export default function Profile() {
         onClose={() => setIsEditOpen(false)}
         initialData={profile}
         onSave={handleSaveProfile}
+        isSaving={saving}
       />
       <ProfileBookings bookings={bookings} />
     </div>

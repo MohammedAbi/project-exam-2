@@ -42,7 +42,7 @@ export default function VenuesTable({
             >
               <td className="p-2 sm:p-3">
                 <img
-                  src={venue.media?.[0]?.url || "/placeholder.jpg"}
+                  src={venue.media?.[0]?.url}
                   alt={venue.media?.[0]?.alt || venue.name}
                   className="w-6 h-6 sm:w-8 sm:h-8 object-cover rounded"
                 />
