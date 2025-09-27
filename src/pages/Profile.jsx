@@ -15,7 +15,7 @@ export default function Profile() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [saving, setSaving] = useState(false);
+  const [setSaving] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
 
   useEffect(() => {
@@ -60,7 +60,6 @@ export default function Profile() {
       setSaving(false);
     }
   };
-  
 
   if (loading)
     return (

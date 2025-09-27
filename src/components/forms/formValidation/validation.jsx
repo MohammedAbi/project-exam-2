@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
  * @param {string} params.confirmPassword - Confirmation of user password
  * @returns {Object} errors - Object containing validation error messages keyed by field name
  */
-export function validateRegister({ name, email, password, confirmPassword }) {
+export function ValidateRegister({ name, email, password, confirmPassword }) {
   const errors = {};
 
   if (!name.trim()) errors.name = "Name is required";
@@ -68,7 +68,7 @@ export function ValidateLogin({ email, password }) {
  * @param {string} params.message - Message content
  * @returns {boolean} True if validation passes, false otherwise
  */
-export function validateContact({ name, email, message }) {
+export function ValidateContact({ name, email, message }) {
   if (!name.trim()) {
     toast.error("Name is required");
     return false;
