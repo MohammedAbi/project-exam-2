@@ -1,4 +1,5 @@
-export const API_BASE_URL = "https://v2.api.noroff.dev";
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+export const API_KEY = import.meta.env.VITE_API_KEY;
 
 // Bookings endpoints
 export const BOOKINGS_ENDPOINTS = {
@@ -24,5 +25,3 @@ export const PROFILES_ENDPOINTS = {
   SEARCH: (query) =>
     `${API_BASE_URL}/holidaze/profiles/search?q=${encodeURIComponent(query)}`,
 };
-
-export const API_KEY = "86390b60-fb20-4dfc-9869-751c01b0d7aa";

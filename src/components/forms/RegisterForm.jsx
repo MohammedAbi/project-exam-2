@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { toast } from "react-toastify";
-import { validateRegister } from "./formValidation/Validation";
+import { ValidateRegister } from "./formValidation/Validation";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({
@@ -35,7 +35,7 @@ export default function RegisterForm() {
     e.preventDefault();
 
     // Validate fields
-    const validationErrors = validateRegister(formData);
+    const validationErrors = ValidateRegister(formData);
     // Add confirmPassword validation
     if (formData.password !== formData.confirmPassword) {
       validationErrors.confirmPassword = "Passwords do not match";

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { validateContact } from "../components/forms/formValidation/validation";
+import { ValidateContact } from "../components/forms/formValidation/Validation";
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -19,7 +19,7 @@ export default function Contact() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const validationErrors = validateContact(formData);
+    const validationErrors = ValidateContact(formData);
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       setSuccessMessage("");
