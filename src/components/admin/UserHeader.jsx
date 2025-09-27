@@ -13,7 +13,7 @@ export default function UserHeader({ user }) {
     >
       <img
         src={user.avatar?.url || "/default-avatar.png"}
-        alt={user.avatar?.alt || user.name || "User avatar"}
+        alt={user.avatar?.alt || (user.avatar ? user.name : "Default Avatar")}
         className="mx-auto rounded-full border-4 border-white w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 object-cover mb-4 shadow-lg"
       />
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold drop-shadow-lg">

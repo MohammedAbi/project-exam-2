@@ -39,7 +39,7 @@ export function validateRegister({ name, email, password, confirmPassword }) {
  * @param {string} params.password - User password
  * @returns {boolean} True if validation passes, false otherwise
  */
-export function validateLogin({ email, password }) {
+export function ValidateLogin({ email, password }) {
   if (!email.trim() || !password.trim()) {
     toast.error("Please fill in both email and password");
     return false;

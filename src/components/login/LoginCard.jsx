@@ -1,5 +1,6 @@
+import React from "react";
 import LoginForm from "../forms/LoginForm";
-import LoginFooter from "./LoginForm";
+import LoginFooter from "./LoginFooter";
 
 export default function LoginCard() {
   return (

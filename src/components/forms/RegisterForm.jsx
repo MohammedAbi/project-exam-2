@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { validateRegister } from "./formValidation/validation";
+
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import { toast } from "react-toastify";
+import { validateRegister } from "./formValidation/Validation";
 
 export default function RegisterForm() {
   const [formData, setFormData] = useState({

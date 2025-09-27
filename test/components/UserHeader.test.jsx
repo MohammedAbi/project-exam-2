@@ -1,10 +1,6 @@
 import React from "react";
-import { it, expect, describe, afterEach } from "vitest";
-import { render, screen, cleanup } from "@testing-library/react";
-import "@testing-library/jest-dom/vitest";
+import { render, screen } from "@testing-library/react";
 import UserHeader from "../../src/components/admin/UserHeader";
-
-afterEach(() => cleanup());
 
 describe("UserHeader", () => {
   const mockUser = {
@@ -17,19 +13,35 @@ describe("UserHeader", () => {
   it("renders correctly with full user data", () => {
     render(<UserHeader user={mockUser} />);
 
-    // Avatar image by role and accessible name
+    // Avatar image
     const avatar = screen.getByRole("img", { name: "John's avatar" });
     expect(avatar).toBeInTheDocument();
     expect(avatar).toHaveAttribute("src", "/avatar.jpg");
 
-    // Header by role "banner"
+    // Header background
     const header = screen.getByRole("banner");
     expect(header).toHaveStyle(`background-image: url(${mockUser.banner.url})`);
 
-    // Name and email text
+    // Name and email
     expect(
       screen.getByRole("heading", { name: "John Doe" })
     ).toBeInTheDocument();
     expect(screen.getByText("john@example.com")).toBeInTheDocument();
+  });
+
+  it("renders default avatar when avatar is missing", () => {
+    render(<UserHeader user={{ ...mockUser, avatar: undefined }} />);
+
+    const avatar = screen.getByRole("img", { name: /default avatar/i });
+    expect(avatar).toHaveAttribute("src", "/default-avatar.png");
+  });
+
+  it("renders without banner when banner is missing", () => {
+    render(<UserHeader user={{ ...mockUser, banner: undefined }} />);
+
+    const header = screen.getByRole("banner");
+    expect(header).not.toHaveStyle(
+      `background-image: url(${mockUser.banner?.url})`
+    );
   });
 });

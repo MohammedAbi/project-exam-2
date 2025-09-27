@@ -1,42 +1,49 @@
 import React from "react";
-import { it, expect, describe, afterEach, vi } from "vitest";
-import { render, screen, fireEvent, cleanup } from "@testing-library/react";
-import "@testing-library/jest-dom/vitest";
+import { render, screen } from "@testing-library/react";
+import { vi } from "vitest";
 import VenueActions from "../../src/components/admin/VenueActions";
 
-afterEach(() => cleanup());
-
 describe("VenueActions", () => {
-  it("calls onEdit when Edit button is clicked", () => {
-    const onEdit = vi.fn();
-    const onDelete = vi.fn();
+  const setup = (props = {}) => {
+    const onEdit = props.onEdit || vi.fn();
+    const onDelete = props.onDelete || vi.fn();
 
     render(<VenueActions onEdit={onEdit} onDelete={onDelete} />);
+    return { onEdit, onDelete };
+  };
 
-    const editButton = screen.getByRole("button", { name: /edit/i });
-    fireEvent.click(editButton);
+  it("renders both Edit and Delete buttons with correct text", () => {
+    setup();
+
+    expect(screen.getByRole("button", { name: /edit/i })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /delete/i })).toBeInTheDocument();
+  });
+
+  it("calls onEdit when Edit button is clicked", () => {
+    const { onEdit, onDelete } = setup();
+
+    screen.getByRole("button", { name: /edit/i }).click();
 
     expect(onEdit).toHaveBeenCalled();
     expect(onDelete).not.toHaveBeenCalled();
   });
 
   it("calls onDelete when Delete button is clicked", () => {
-    const onEdit = vi.fn();
-    const onDelete = vi.fn();
+    const { onEdit, onDelete } = setup();
 
-    render(<VenueActions onEdit={onEdit} onDelete={onDelete} />);
-
-    const deleteButton = screen.getByRole("button", { name: /delete/i });
-    fireEvent.click(deleteButton);
+    screen.getByRole("button", { name: /delete/i }).click();
 
     expect(onDelete).toHaveBeenCalled();
     expect(onEdit).not.toHaveBeenCalled();
   });
 
-  it("renders both Edit and Delete buttons", () => {
-    render(<VenueActions onEdit={() => {}} onDelete={() => {}} />);
+  it("buttons have expected CSS classes", () => {
+    setup();
 
-    expect(screen.getByRole("button", { name: /edit/i })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /delete/i })).toBeInTheDocument();
+    const editButton = screen.getByRole("button", { name: /edit/i });
+    const deleteButton = screen.getByRole("button", { name: /delete/i });
+
+    expect(editButton).toHaveClass("bg-blue-600");
+    expect(deleteButton).toHaveClass("bg-red-600");
   });
 });

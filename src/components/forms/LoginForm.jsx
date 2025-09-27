@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 import { isLoggedIn } from "../../config/services/authStorage";
-import { validateLogin } from "./formValidation/validation";
+import { ValidateLogin } from "./formValidation/Validation";
 import { useAuth } from "../../hooks/useAuth";
 
 export default function LoginForm() {
@@ -24,7 +24,7 @@ export default function LoginForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!validateLogin(formData)) {
+    if (!ValidateLogin(formData)) {
       return;
     }
     const loggedInUser = await login(formData.email, formData.password);
