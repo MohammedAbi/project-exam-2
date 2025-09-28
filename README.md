@@ -15,12 +15,13 @@ This image gives a glimpse into the Holidaze vacation booking app's user interfa
 ### User Features
 
 - View a list of venues
-- Search for a specific venue
+- Search for venues
+- Sort and order venues
 - View venue details by ID
-- View available dates in a calendar
-- User registration (student emails only)
-- Create and view bookings
-- User login and logout
+- Check available dates on a calendar
+- Register as a user (student emails only)
+- Create and manage bookings
+- Log in and log out
 - Update user avatar
 
 ### Venue Manager Features
@@ -141,6 +142,12 @@ await page.fill('input[name="email"]', "E2etestuser13@stud.noroff.no");
 ```
 
 ➡️ Each run should increase the numeric suffix (`14`, `15`, etc.) to avoid conflicts with already registered users.
+
+- Run e2e tests headless mode:
+
+  ```bash
+  npm run test:e2e
+  ```
 
 - Run e2e tests in headed mode:
 
