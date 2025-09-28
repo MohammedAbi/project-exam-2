@@ -87,7 +87,7 @@ This image gives a glimpse into the Holidaze vacation booking app's user interfa
    VITE_API_KEY=<your-api-key>
    ```
 
-4. Start the development server and mock API:
+4. Start the development server:
 
    ```bash
    npm run start
@@ -132,7 +132,7 @@ This project includes **unit & integration tests** (Vitest + React Testing Libra
 ### E2E Registration Testing
 
 For end-to-end testing of user registration, a new unique user must be created each time.  
-In the file `test/e2e/RegisterForm.spec.js`, update the test user values by incrementing the number in the username, email, and password fields:
+In the file `test/e2e/RegisterForm.spec.js`, update the test user values by incrementing the number in the username and email fields:
 
 ```js
 // Fill required fields
@@ -140,7 +140,7 @@ await page.fill('input[name="name"]', "E2etestuser13");
 await page.fill('input[name="email"]', "E2etestuser13@stud.noroff.no");
 ```
 
-➡️ Each run should increase the numeric suffix (`13`, `14`, etc.) to avoid conflicts with already registered users.
+➡️ Each run should increase the numeric suffix (`14`, `15`, etc.) to avoid conflicts with already registered users.
 
 - Run e2e tests in headed mode:
 
@@ -164,7 +164,7 @@ await page.fill('input[name="email"]', "E2etestuser13@stud.noroff.no");
 
 ## Test Users
 
-- **Customer Test User**
+- **Test User (Venue Manager)**
 
   - Email: [leona3@stud.noroff.no](mailto:leona3@stud.noroff.no)
   - Password: abc123123
