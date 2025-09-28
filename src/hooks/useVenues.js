@@ -3,6 +3,25 @@ import { venuesApi } from "../config/services/venuesApi";
 
 /**
  * Custom hook to fetch venues with pagination, sorting, optional owner filter, and search.
+ *
+ * @param {Object} initialParams - Initial parameters for fetching venues.
+ * @param {number} initialParams.limit - Number of venues per page (default 10).
+ * @param {number} initialParams.page - Current page number (default 1).
+ * @param {string|null} initialParams.owner - Optional owner ID to filter venues.
+ * @param {string} initialParams.sort - Field to sort by (default "name").
+ * @param {"asc"|"desc"} initialParams.sortOrder - Sort order (default "asc").
+ * @param {string} initialParams.search - Search term (default empty string).
+ * @param {string|null} accessToken - Optional access token for authenticated requests.
+ *
+ * @returns {Object} An object containing:
+ *   @property {Array} venues - Array of venue objects.
+ *   @property {boolean} loading - Loading state.
+ *   @property {string|null} error - Error message if fetching fails.
+ *   @property {number} totalPages - Total number of pages available.
+ *   @property {number} currentPage - Current page number.
+ *   @property {Object} params - Current parameters for the query.
+ *   @property {Function} setParams - Function to update query parameters.
+ *   @property {Function} refetch - Function to refetch venues manually.
  */
 export function useVenues(
   initialParams = {
@@ -11,7 +30,7 @@ export function useVenues(
     owner: null,
     sort: "name",
     sortOrder: "asc",
-    search: "", 
+    search: "",
   },
   accessToken = null
 ) {
